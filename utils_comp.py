@@ -615,7 +615,7 @@ class DescensoRecursivoCalc(object):
         self.e_post_fija = ""
         self.resultado = None
         self.expresion = sigma
-        self.a_lex = AnalizadorLexico(sigma, './afd_fijos/afd_post_espacios')
+        self.a_lex = AnalizadorLexico(sigma, './pruebas/afd_pe')
 
     def set_expresion(self, sigma):
         self.expresion = sigma
@@ -715,7 +715,7 @@ class ERaAFN(object):
     def __init__(self, expresion_r):
         self.expresion_r = expresion_r
         self.afd_result = AFN()
-        self.a_lex = AnalizadorLexico(expresion_r, './afd_fijos/afd_er_especiales')
+        self.a_lex = AnalizadorLexico(expresion_r, './pruebas/afd_er_especiales')
 
     def ini_conversion(self):
         f = AFN()
@@ -856,7 +856,7 @@ class DescensoRecGramGram(object):
         self.tabla_ll1 = list()
         self.tokens_vt = dict()
         self.gramatica = sigma
-        self.a_lex = AnalizadorLexico(sigma, './afd_fijos/afd_dr_gg')
+        self.a_lex = AnalizadorLexico(sigma, './pruebas/afd_dr_gg')
 
         self.arr_reglas = list()
         self.numero_reglas = 0
@@ -1258,14 +1258,31 @@ class DescensoRecGramGram(object):
         return True
 
     def format_tabla_resultante(self):
+
+        all_ctx = []
+
         for pila, cadena in self.res_sigma_ll1:
             str_pila = ""
             str_cadena = ""
+
             for regla in pila:
                 str_pila = str_pila + f" {regla}"
             for yylex in cadena:
                 str_cadena = str_cadena + yylex
+
+            print(str_pila)
+            print(str_cadena)
+
+            print([str_pila, str_cadena])
+            all_ctx.append([str_pila, str_cadena])
             self.tabla_txt_eval_ll1.append([str_pila, str_cadena])
+
+        print(all_ctx)
+
+        # Saving ctx in ctx.txt
+        with open('ctx.txt', 'w') as f:
+            for ctx in all_ctx:
+                f.write(f"{ctx[0]} | {ctx[1]}\n")
         # print('*'*12)
         # for linea in self.tabla_txt_eval_ll1:
         #     print(linea)

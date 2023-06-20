@@ -1,0 +1,65 @@
+ $ E | (a|b)*&(c|d)+&[a-w]?$
+ $ Ep T | (a|b)*&(c|d)+&[a-w]?$
+ $ Ep Tp C | (a|b)*&(c|d)+&[a-w]?$
+ $ Ep Tp Cp F | (a|b)*&(c|d)+&[a-w]?$
+ $ Ep Tp Cp parD E parI | (a|b)*&(c|d)+&[a-w]?$
+ $ Ep Tp Cp parD E | a|b)*&(c|d)+&[a-w]?$
+ $ Ep Tp Cp parD Ep T | a|b)*&(c|d)+&[a-w]?$
+ $ Ep Tp Cp parD Ep Tp C | a|b)*&(c|d)+&[a-w]?$
+ $ Ep Tp Cp parD Ep Tp Cp F | a|b)*&(c|d)+&[a-w]?$
+ $ Ep Tp Cp parD Ep Tp Cp simb | a|b)*&(c|d)+&[a-w]?$
+ $ Ep Tp Cp parD Ep Tp Cp | |b)*&(c|d)+&[a-w]?$
+ $ Ep Tp Cp parD Ep Tp | |b)*&(c|d)+&[a-w]?$
+ $ Ep Tp Cp parD Ep | |b)*&(c|d)+&[a-w]?$
+ $ Ep Tp Cp parD Ep T OR | |b)*&(c|d)+&[a-w]?$
+ $ Ep Tp Cp parD Ep T | b)*&(c|d)+&[a-w]?$
+ $ Ep Tp Cp parD Ep Tp C | b)*&(c|d)+&[a-w]?$
+ $ Ep Tp Cp parD Ep Tp Cp F | b)*&(c|d)+&[a-w]?$
+ $ Ep Tp Cp parD Ep Tp Cp simb | b)*&(c|d)+&[a-w]?$
+ $ Ep Tp Cp parD Ep Tp Cp | )*&(c|d)+&[a-w]?$
+ $ Ep Tp Cp parD Ep Tp | )*&(c|d)+&[a-w]?$
+ $ Ep Tp Cp parD Ep | )*&(c|d)+&[a-w]?$
+ $ Ep Tp Cp parD | )*&(c|d)+&[a-w]?$
+ $ Ep Tp Cp | *&(c|d)+&[a-w]?$
+ $ Ep Tp Cp POR | *&(c|d)+&[a-w]?$
+ $ Ep Tp Cp | &(c|d)+&[a-w]?$
+ $ Ep Tp | &(c|d)+&[a-w]?$
+ $ Ep Tp C AND | &(c|d)+&[a-w]?$
+ $ Ep Tp C | (c|d)+&[a-w]?$
+ $ Ep Tp Cp F | (c|d)+&[a-w]?$
+ $ Ep Tp Cp parD E parI | (c|d)+&[a-w]?$
+ $ Ep Tp Cp parD E | c|d)+&[a-w]?$
+ $ Ep Tp Cp parD Ep T | c|d)+&[a-w]?$
+ $ Ep Tp Cp parD Ep Tp C | c|d)+&[a-w]?$
+ $ Ep Tp Cp parD Ep Tp Cp F | c|d)+&[a-w]?$
+ $ Ep Tp Cp parD Ep Tp Cp simb | c|d)+&[a-w]?$
+ $ Ep Tp Cp parD Ep Tp Cp | |d)+&[a-w]?$
+ $ Ep Tp Cp parD Ep Tp | |d)+&[a-w]?$
+ $ Ep Tp Cp parD Ep | |d)+&[a-w]?$
+ $ Ep Tp Cp parD Ep T OR | |d)+&[a-w]?$
+ $ Ep Tp Cp parD Ep T | d)+&[a-w]?$
+ $ Ep Tp Cp parD Ep Tp C | d)+&[a-w]?$
+ $ Ep Tp Cp parD Ep Tp Cp F | d)+&[a-w]?$
+ $ Ep Tp Cp parD Ep Tp Cp simb | d)+&[a-w]?$
+ $ Ep Tp Cp parD Ep Tp Cp | )+&[a-w]?$
+ $ Ep Tp Cp parD Ep Tp | )+&[a-w]?$
+ $ Ep Tp Cp parD Ep | )+&[a-w]?$
+ $ Ep Tp Cp parD | )+&[a-w]?$
+ $ Ep Tp Cp | +&[a-w]?$
+ $ Ep Tp Cp MAS | +&[a-w]?$
+ $ Ep Tp Cp | &[a-w]?$
+ $ Ep Tp | &[a-w]?$
+ $ Ep Tp C AND | &[a-w]?$
+ $ Ep Tp C | [a-w]?$
+ $ Ep Tp Cp F | [a-w]?$
+ $ Ep Tp Cp corD simb guion simb corI | [a-w]?$
+ $ Ep Tp Cp corD simb guion simb | a-w]?$
+ $ Ep Tp Cp corD simb guion | -w]?$
+ $ Ep Tp Cp corD simb | w]?$
+ $ Ep Tp Cp corD | ]?$
+ $ Ep Tp Cp | ?$
+ $ Ep Tp Cp OPC | ?$
+ $ Ep Tp Cp | $
+ $ Ep Tp | $
+ $ Ep | $
+ $ | $

@@ -1,0 +1,6 @@
+E -> T Ep ;
+Ep -> mas T Ep | menos T Ep | epsilon ;
+T -> F Tp ;
+Tp -> por F Tp | entre F Tp | epsilon ;
+F -> parenI E parenD | num ;
+

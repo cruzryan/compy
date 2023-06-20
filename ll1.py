@@ -1,7 +1,8 @@
 import copy
 
-from clases import DescensoRecGramGram, AnalizadorLexico
-
+from utils_comp import DescensoRecGramGram, AnalizadorLexico
+import PySimpleGUI as sg
+print = sg.Print
 
 class AnalizadorLL1(object):
     def __init__(self, cad_gramatica):
@@ -19,6 +20,13 @@ class AnalizadorLL1(object):
         self.v = list()
 
     def calcular_tabla_ll1(self):
+        print("CALCULANDO TABLA LL1")
+
+        # Write in logs.txt
+        with open('logs.txt', 'a') as file:
+            file.write("CALCULANDO TABLA LL1\n")
+            
+
         if not self.desc_rec_gg.analizar_gramatica():
             return False
 

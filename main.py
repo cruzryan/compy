@@ -1,28 +1,22 @@
 import copy
 import pickle
 
-from disenos import *
-# import BUClases as clases
-import clases
+from ui import *
+import utils_comp
 import time
-
-from lr0 import AnalizadorLR0
-from lr1 import AnalizadorLR1
+import fk as fk
 
 TIEMPO_A_DORMIR = 3
 
-main_afn = clases.AFN()
+main_afn = utils_comp.AFN()
 main_tabla_union = list()
 tabla_resultado_union_lexico = list(list())
 terminales_tokens_ll1 = list()
 terminales_tokens_lr0 = list()
 terminales_tokens_lr1 = list()
 
-# Define Window
-window = sg.Window("Compiladores", layout, size=(1500, 500))
+window = sg.Window("2ndo Parcial", layout, size=(1600, 700), )
 
-
-# Read  values entered by user
 def crear_popup(tipo, valores=None):
     if tipo == 'basico':
         mensaje = "Se ha creado un automata con:\n" \
@@ -32,11 +26,11 @@ def crear_popup(tipo, valores=None):
             .format(valores['-char_inf-'], valores['-char_sup-'], valores['-id_basico-'])
         sg.popup(mensaje, title='Exito')
     elif tipo == 'Error':
-        mensaje = 'Favor de verificar las entradas'
+        mensaje = 'verificar las entradas'
         sg.popup(mensaje, title='Error', text_color='Red')
 
 
-def actualizar_campos():  # TODO cambiar a actualizar_todo()
+def actualizar_campos():  
     ordernados = []
     for afn in main_afn.conjunto_AFNs:
         ordernados.append(afn.id_AFN)
@@ -74,7 +68,7 @@ def crear_basico(valores):
     if int(valores['-id_basico-']) in [afn.id_AFN for afn in main_afn.conjunto_AFNs]:
         sg.popup("Ingrese otro id que no exista", title='Error', text_color='Red')
         return
-    temp_afn = clases.AFN()
+    temp_afn = utils_comp.AFN()
     main_afn.conjunto_AFNs.append(
         temp_afn.crear_afn_basico(values['-char_inf-'], values['-char_sup-'], int(values['-id_basico-'])))
 
@@ -92,7 +86,7 @@ def crear_basico(valores):
 
 def crear_positiva(valores):
     if valores['-id_positiva-'] == '':
-        sg.popup("Favor de seleccionar un automata", title='Error', text_color='Red')
+        sg.popup("seleccionar un automata", title='Error', text_color='Red')
         return
     id_afn = int(valores['-id_positiva-'])
     for afn in main_afn.conjunto_AFNs:
@@ -105,7 +99,7 @@ def crear_positiva(valores):
 
 def crear_kleen(valores):
     if valores['-id_kleen-'] == '':
-        sg.popup("Favor de seleccionar un automata", title='Error', text_color='Red')
+        sg.popup("seleccionar un automata", title='Error', text_color='Red')
         return
     id_afn = int(valores['-id_kleen-'])
     for afn in main_afn.conjunto_AFNs:
@@ -149,12 +143,12 @@ def token_union_lexico(valores):
         tabla_resultado_union_lexico[lugar][1] = token
         window['-UNION RESULTADO LEXICO-'].update(values=tabla_resultado_union_lexico)
     except IndexError:
-        sg.popup("Favor de seleccionar la casilla para agregar el token", title='Error', text_color='Red')
+        sg.popup("seleccionar la casilla para agregar el token", title='Error', text_color='Red')
 
 
 def unir_afns(valores):
     if valores['-id_1_union-'] == '' or valores['-id_2_union-'] == '':
-        sg.popup("Favor de seleccionar los automatas a unir", title='Error', text_color='Red')
+        sg.popup("seleccionar los automatas a unir", title='Error', text_color='Red')
         return
     if valores['-id_1_union-'] == valores['-id_2_union-']:
         sg.popup("Selecciona dos automatas distintos", title='Error', text_color='Red')
@@ -177,7 +171,7 @@ def unir_afns(valores):
 
 def concatenar_afns(valores):
     if valores['-id_1_concatenar-'] == '' or valores['-id_2_concatenar-'] == '':
-        sg.popup("Favor de seleccionar los automatas a concatenar", title='Error', text_color='Red')
+        sg.popup("seleccionar los automatas a concatenar", title='Error', text_color='Red')
         return
     if valores['-id_1_concatenar-'] == valores['-id_2_concatenar-']:
         sg.popup("Selecciona dos automatas distintos", title='Error', text_color='Red')
@@ -230,7 +224,7 @@ def crear_union_lexico():
 
 def convertir_afd_a_afn(valores):
     if valores['-id_convertir_a_afd-'] == '':
-        sg.popup("Favor de seleccionar un automata", title='Error', text_color='Red')
+        sg.popup("seleccionar un automata", title='Error', text_color='Red')
         return
     id_afn = int(valores['-id_convertir_a_afd-'])
     for afn in main_afn.conjunto_AFNs:
@@ -245,10 +239,10 @@ def convertir_afd_a_afn(valores):
 
 def probar_analizador_lexico(valores):
     if valores['-nombre_afd_txt-'] == '':
-        sg.popup("Favor de ingresar el nombre del archivo", title='Error', text_color='Red')
+        sg.popup("ingresar el nombre del archivo", title='Error', text_color='Red')
         return
     if valores['-cadena_sigma_al-'] == '':
-        sg.popup("Favor de ingresar una cadena a evaluar", title='Error', text_color='Red')
+        sg.popup("ingresar una cadena a evaluar", title='Error', text_color='Red')
         return
     sigma = valores['-cadena_sigma_al-']
     nom_txt = valores['-nombre_afd_txt-']
@@ -259,7 +253,7 @@ def probar_analizador_lexico(valores):
         sg.popup(f"El archivo {nom_txt}.txt no existe", title='Error', text_color='Red')
         return
 
-    anal_lexico = clases.AnalizadorLexico(sigma, nom_txt)
+    anal_lexico = utils_comp.AnalizadorLexico(sigma, nom_txt)
 
     tabla_lexemas = list()
 
@@ -286,7 +280,7 @@ def probar_analizador_lexico(valores):
 def evaluar_postfijo(valores):
     sigma = valores['-val_post-']
 
-    evaluador_p = clases.DescensoRecursivoCalc(sigma)
+    evaluador_p = utils_comp.DescensoRecursivoCalc(sigma)
     if evaluador_p.ini_eval():
         window['-res_post-'].update(value=evaluador_p.resultado)
         window['-ex_post-'].update(value=evaluador_p.e_post_fija)
@@ -296,10 +290,10 @@ def evaluar_postfijo(valores):
 
 def convertir_de_er(valores):
     if valores['-nombre_afd_er_txt-'] == '':
-        sg.popup("Favor de ingresar el nombre del archivo", title='Error', text_color='Red')
+        sg.popup("ingresar el nombre del archivo", title='Error', text_color='Red')
         return
     if valores['-in_er-'] == '':
-        sg.popup("Favor de ingresar una cadena a evaluar", title='Error', text_color='Red')
+        sg.popup("ingresar una cadena a evaluar", title='Error', text_color='Red')
         return
     try:
         id_er = int(valores['-id_afn_er-'])
@@ -308,7 +302,7 @@ def convertir_de_er(valores):
             return
         expresion_r = valores['-in_er-']
 
-        convertidor = clases.ERaAFN(expresion_r)
+        convertidor = utils_comp.ERaAFN(expresion_r)
         if not convertidor.ini_conversion():
             sg.popup("Verfique la expresion regular", title='Error', text_color='Red')
             return
@@ -318,19 +312,20 @@ def convertir_de_er(valores):
         sg.popup("Se ha convertida la expresion regular correctamente", title='Exito')
         actualizar_campos()
     except ValueError:
-        sg.popup("Favor de ingresar un valor entero para el id", title='Error', text_color='Red')
+        sg.popup("ingresar un valor entero para el id", title='Error', text_color='Red')
 
 
 def analisis_ll1(valores):
+    print("Analizando Gramatica!")
     sigma = valores['-sigma_ll1-']
 
     terminales_tokens_ll1.clear()
-    dr_gg = clases.DescensoRecGramGram(sigma)
+    dr_gg = utils_comp.DescensoRecGramGram(sigma)
 
     if not dr_gg.analizar_gramatica():
         sg.popup("Gramatica no LL(1)", title='Error', text_color='Red')
         return
-    sg.popup("Gramatica aceptada", title='Exito')
+    sg.popup("Aceptada", title='Status de Gramatica')
 
     dr_gg.calcular_tabla_ll1()
 
@@ -417,23 +412,27 @@ def mostrar_tabla_ll1():
             ventana.close()
 
     except FileNotFoundError:
-        sg.popup("Favor de analizar primero una gramatica", title='Error', text_color='Red')
+        sg.popup("  analizar primero una gramatica", title='Error', text_color='Red')
 
+
+# EVALUANDO SIGMAAA
 
 def evaluar_sigma_ll1(valores):
+
+    print("Evaluando Sigma!")
     if valores['-archivo_afd_ll1-'] == '':
-        sg.popup("Favor de ingresar el nombre del archivo", title='Error', text_color='Red')
+        sg.popup("ingresar el nombre del archivo", title='Error', text_color='Red')
         return
     if valores['-sigma_eval_ll1-'] == '':
-        sg.popup("Favor de ingresar una cadena a evaluar", title='Error', text_color='Red')
+        sg.popup("ingresar una cadena a evaluar", title='Error', text_color='Red')
         return
 
     if len(terminales_tokens_ll1) == 0:
-        sg.popup("Favor de asignar todos los tokens", title='Error', text_color='Red')
+        sg.popup("asignar todos los tokens", title='Error', text_color='Red')
         return
     for s, t in terminales_tokens_ll1:
         if t == '-1':
-            sg.popup("Favor de asignar todos los tokens", title='Error', text_color='Red')
+            sg.popup("asignar todos los tokens", title='Error', text_color='Red')
             return
 
     nom_txt = valores['-archivo_afd_ll1-']
@@ -453,22 +452,29 @@ def evaluar_sigma_ll1(valores):
             return
         sg.popup("Gramatica sintacticamente correcta", title='Exito')
         window['-ll1_pila-'].update(values=r_ll1.tabla_txt_eval_ll1)
+    
+    fk.shg()
 
     # a_ll1 = clases.AnalizadorLL1(sigma, nom_txt, terminales_tokens_ll1)
     # a_ll1.obtener_tokens()
 
 
 def asignar_token_ll1(valores):
+
+    print("VALORES: ", valores)
     tokens_vt = valores['-token_ll1-']
+
+    print("TOKENS: ", tokens_vt)
     r_ll1 = None
     if tokens_vt == '':
-        sg.popup("Favor de ingresar un token", title='Error', text_color='Red')
+        sg.popup("ingresar un token", title='Error', text_color='Red')
         return
     try:
         with open("res_ll1.pickle", "rb") as archivo_t_ll1:
             r_ll1 = pickle.load(archivo_t_ll1)
 
             lugar = valores['-ll1_terminales-'][0]
+            print("LUGAR: ", lugar)
             terminales_tokens_ll1[lugar][1] = tokens_vt
 
             # DICT = { [token] : [simbolo] }
@@ -479,137 +485,27 @@ def asignar_token_ll1(valores):
         with open("res_ll1.pickle", "wb") as archivo_t_ll1:
             pickle.dump(r_ll1, archivo_t_ll1)
     except IndexError:
-        sg.popup("Favor de seleccionar la casilla para agregar el token", title='Error', text_color='Red')
+        sg.popup("seleccionar la casilla para agregar el token", title='Error', text_color='Red')
 
 
-def analisis_lr0(valores):
-    sigma = valores['-sigma_lr0-']
-    # TODO cammbiar archivo en codigo a dinamico
-    a_lr0 = AnalizadorLR0(sigma, './afd_fijos/afd_post_espacios')
-    if not a_lr0.crear_tabla_lr0():
-        sg.popup("Favor de verificar la gramatica", title='Error', text_color='Red')
-        return
-    sg.popup("Gramatica aceptada - LR(0)", title='Exito')
-    terminales_tokens_lr0.clear()
+def asignar_tokens_ll1_rapido(valores):
+    
+    r_ll1 = None
+    with open("res_ll1.pickle", "rb") as archivo_t_ll1:
+        r_ll1 = pickle.load(archivo_t_ll1)
+        # Loop from 0 to 7
+        for i in range(1, 8):
+            lugar = i-1
+            print("LUGAR: ", lugar)
+            terminales_tokens_ll1[lugar][1] = (i)*10
+            r_ll1.tokens_vt[terminales_tokens_ll1[lugar][1]] = terminales_tokens_ll1[lugar][0]
+            window['-ll1_terminales-'].update(values=terminales_tokens_ll1)
 
-    for index, simbolo in enumerate(a_lr0.v_t):
-        terminales_tokens_lr0.append([simbolo, '-1'])
+    with open("res_ll1.pickle", "wb") as archivo_t_ll1:
+        pickle.dump(r_ll1, archivo_t_ll1)
 
-    window['-lr0_no_terminales-'].update(values=a_lr0.v_n)
-    window['-lr0_terminales-'].update(values=terminales_tokens_lr0)
-
-    with open("res_lr0.pickle", "wb") as f_res:
-        pickle.dump(a_lr0, f_res)
-
-
-def mostrar_tabla_lr0():
-    try:
-        with open("res_lr0.pickle", "rb") as archivo_t_lr0:
-            a_lr0 = pickle.load(archivo_t_lr0)
-            lista_encabezados = copy.copy(a_lr0.v)
-            # lista_encabezados.insert(0, 'Regla')
-            # lista_encabezados.append('$')
-
-            diseno = [
-                [sg.Text("Tabla LR(0)")],
-                [
-                    sg.Table(
-                        values=a_lr0.tabla_lr0,
-                        headings=lista_encabezados,
-                        auto_size_columns=False,
-                        def_col_width=10,
-                        expand_x=False,
-                        expand_y=True,
-                        vertical_scroll_only=False,
-                        display_row_numbers=True,
-                        alternating_row_color='grey',
-                        row_height=20,
-                        justification='center',
-                        key='-tabla_lr0_ventana-',
-                    ),
-                ],
-            ]
-
-            ventana = sg.Window("Tabla LR(0)", diseno, finalize=True, size=(1200, 800))
-
-            # tabla = ventana['-tabla_ll1_ventana-'].Widget
-            # tabla.heading('Row', text='Regla')
-
-            while True:
-                evento, info = ventana.read()
-                if evento == "Exit" or evento == sg.WIN_CLOSED:
-                    break
-
-            ventana.close()
-
-    except FileNotFoundError:
-        sg.popup("Favor de analizar primero una gramatica", title='Error', text_color='Red')
-
-
-def analisis_lr1(valores):
-    sigma = valores['-sigma_lr1-']
-    a_lr1 = AnalizadorLR1(sigma)
-
-    if not a_lr1.crear_tabla_lr1():
-        sg.popup("Favor de verificar la gramatica", title='Error', text_color='Red')
-        return
-    sg.popup("Gramatica aceptada - LR(1)", title='Exito')
-
-    terminales_tokens_lr1.clear()
-
-    for index, simbolo in enumerate(a_lr1.v_t):
-        terminales_tokens_lr1.append([simbolo, '-1'])
-
-    window['-lr1_no_terminales-'].update(values=a_lr1.v_n)
-    window['-lr1_terminales-'].update(values=terminales_tokens_lr1)
-
-    with open("res_lr1.pickle", "wb") as f_res:
-        pickle.dump(a_lr1, f_res)
-
-
-def mostrar_tabla_lr1(valores):
-    try:
-        with open("res_lr1.pickle", "rb") as archivo_t_lr1:
-            a_lr1 = pickle.load(archivo_t_lr1)
-            lista_encabezados = copy.copy(a_lr1.v)
-            # lista_encabezados.insert(0, 'Regla')
-            # lista_encabezados.append('$')
-
-            diseno = [
-                [sg.Text("Tabla LR(1)")],
-                [
-                    sg.Table(
-                        values=a_lr1.tabla_lr1,
-                        headings=lista_encabezados,
-                        auto_size_columns=False,
-                        def_col_width=10,
-                        expand_x=False,
-                        expand_y=True,
-                        vertical_scroll_only=False,
-                        display_row_numbers=True,
-                        alternating_row_color='grey',
-                        row_height=20,
-                        justification='center',
-                        key='-tabla_lr1_ventana-',
-                    ),
-                ],
-            ]
-
-            ventana = sg.Window("Tabla LR(1)", diseno, finalize=True, size=(1200, 800))
-
-            # tabla = ventana['-tabla_ll1_ventana-'].Widget
-            # tabla.heading('Row', text='Regla')
-
-            while True:
-                evento, info = ventana.read()
-                if evento == "Exit" or evento == sg.WIN_CLOSED:
-                    break
-
-            ventana.close()
-
-    except FileNotFoundError:
-        sg.popup("Favor de analizar primero una gramatica", title='Error', text_color='Red')
-
+    print("VALORES RAPIDO: ")
+    print(valores)
 
 while True:
     event, values = window.read()
@@ -649,14 +545,8 @@ while True:
         evaluar_sigma_ll1(values)
     elif event == "-TOKEN LL(1)-":
         asignar_token_ll1(values)
-    elif event == '-ANALIZAR LR(0)-':
-        analisis_lr0(values)
-    elif event == "-MOSTRAR TABLA LR(0)-":
-        mostrar_tabla_lr0()
-    # TODO Implementar tokens y evaluar sigma ll(1)
-    elif event == "-ANALIZAR LR(1)-":
-        analisis_lr1(values)
-    elif event == '-MOSTRAR TABLA LR(1)-':
-        mostrar_tabla_lr1(values)
+    elif event == "-TOKEN AGREGAR RAPIDO-":
+        asignar_tokens_ll1_rapido(values)
+
 
 window.close()
